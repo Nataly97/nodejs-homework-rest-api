@@ -20,7 +20,7 @@ router.get('/:contactId', async (req, res, next) => {
 router.post('/', async (req, res, next) => {
   const body = req.body;
   const result = await controller.addContact(body);
-  if (result){
+  if (result) {
     res.status(201).json(result);
   } else {
     res.status(400).send({ message: 'Missing required name field' })
@@ -38,7 +38,18 @@ router.delete('/:contactId', async (req, res, next) => {
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const contactId = req.params.contactId;
+  const body = req.body;
+  if (!body || Object.keys(body).length === 0) {
+    return res.status(400).json({ message: "Missing fields" });
+  } else {
+    const result = await controller.updateContact(contactId, body);
+    if (result) {
+      res.status(200).json(result);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
+  }
 })
 
 module.exports = router

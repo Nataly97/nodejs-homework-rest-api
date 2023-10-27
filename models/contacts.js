@@ -57,7 +57,7 @@ const addContact = async (body) => {
   })
   try {
     let result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    let newContact = await schema.validateAsync( {
+    let newContact = await schema.validateAsync({
       id: body.id,
       name: body.name,
       email: body.email,
@@ -73,7 +73,30 @@ const addContact = async (body) => {
 }
 
 //Función para actualizar contacto por Id
-const updateContact = async (contactId, body) => { }
+const updateContact = async (contactId, body) => {
+  const schema = joi.object({
+    name: joi.optional(),
+    email: joi.optional(),
+    phone: joi.optional(),
+  });
+  try {
+    const result = JSON.parse((await fs.readFile(pathContacts)).toString());
+    for (contact of result) {
+      if (contact.id == contactId) {
+        const { error } = schema.validate(body);
+        if (!error) {
+          contact.name = body.name ? body.name : contact.name
+          contact.email = body.email ? body.email : contact.email;
+          contact.phone = body.phone ? body.phone : contact.phone;
+          await fs.writeFile(pathContacts, JSON.stringify(result, null, 2))
+          return contact
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 module.exports = {
   listContacts,
