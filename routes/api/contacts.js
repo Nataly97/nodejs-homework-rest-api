@@ -18,15 +18,21 @@ router.get('/:contactId', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const body = req.body;
+  const result = await controller.addContact(body);
+  if (result){
+    res.status(201).json(result);
+  } else {
+    res.status(400).send({ message: 'Missing required name field' })
+  }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
   const contactId = req.params.contactId;
   const result = await controller.removeContact(contactId);
-  if (result) {
-    res.status(200).json({mensaje: "Contacto eliminado"})
-  }else{
+  if (result === true) {
+    res.status(200).json({ message: "Contacto eliminado" })
+  } else {
     res.status(404).json({ message: 'Not found' })
   }
 })
