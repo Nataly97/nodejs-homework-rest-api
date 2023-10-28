@@ -20,11 +20,8 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    for (contact of result) {
-      if (contact.id == contactId) {
-        return contact;
-      }
-    }
+    const contact = result.find(contact => contact.id === contactId)
+    return contact
   } catch (error) {
     console.log(error)
   }
@@ -34,13 +31,9 @@ const getContactById = async (contactId) => {
 const removeContact = async (contactId) => {
   try {
     let result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    for (contact of result) {
-      if (contact.id === contactId) {
-        result.splice(result.indexOf(contact), 1);
-        await fs.writeFile(pathContacts, JSON.stringify(result, null, 2));
-        return true;
-      }
-    }
+    const updatedContacts = result.filter(contact => contact.id !== contactId);
+    await fs.writeFile(pathContacts, JSON.stringify(updatedContacts, null, 2));
+    return true;
   } catch (error) {
     console.log(error)
   }
@@ -48,24 +41,21 @@ const removeContact = async (contactId) => {
 
 //Función para crear un nuevo contacto 
 const addContact = async (body) => {
-  body.id = nanoid.nanoid();
   const schema = joi.object({
-    id: joi.string().required(),
     name: joi.string().required(),
     email: joi.string().required(),
-    phone: joi.number().required(),
-  })
+    phone: joi.string().required(),
+  });
   try {
     let result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    let newContact = await schema.validateAsync({
-      id: body.id,
+    await schema.validateAsync({
       name: body.name,
       email: body.email,
       phone: body.phone,
-    })
+    });
+    let newContact = { id: nanoid.nanoid(), ...body };
     result.push(newContact);
-    await fs.writeFile(pathContacts, JSON.stringify(result, null, 2))
-    console.log
+    await fs.writeFile(pathContacts, JSON.stringify(result, null, 2));
     return newContact;
   } catch (error) {
     console.log(error)
@@ -75,19 +65,19 @@ const addContact = async (body) => {
 //Función para actualizar contacto por Id
 const updateContact = async (contactId, body) => {
   const schema = joi.object({
-    name: joi.optional(),
-    email: joi.optional(),
-    phone: joi.optional(),
+    name: joi.string().allow('').optional(),
+    email: joi.string().allow('').optional(),
+    phone: joi.string().allow('').optional(),
   });
   try {
     const result = JSON.parse((await fs.readFile(pathContacts)).toString());
     for (contact of result) {
       if (contact.id == contactId) {
+        contact.name = body.name ? body.name : contact.name
+        contact.email = body.email ? body.email : contact.email;
+        contact.phone = body.phone ? body.phone : contact.phone;
         const { error } = schema.validate(body);
         if (!error) {
-          contact.name = body.name ? body.name : contact.name
-          contact.email = body.email ? body.email : contact.email;
-          contact.phone = body.phone ? body.phone : contact.phone;
           await fs.writeFile(pathContacts, JSON.stringify(result, null, 2))
           return contact
         }
