@@ -2,18 +2,15 @@
 const fs = require('fs/promises');
 const path = require('path');
 const pathContacts = path.join(__dirname, "../models/contacts.json");
-
-const nanoid = require('nanoid');
 const joi = require('joi');
 
-const mongoose = require('mongoose');
-const { Schema } = mongoose;
+const Contact = require("./contactSchema")
 
 //Función para listar contactos 
 const listContacts = async () => {
   try {
-    const result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    return result;
+    let listContacts = await Contact.find();
+    return listContacts;
   } catch (error) {
     console.log(error)
   }
@@ -45,24 +42,6 @@ const removeContact = async (contactId) => {
 //Función para crear un nuevo contacto 
 const addContact = async (body) => {
   try {
-    const contactSchema = new Schema({
-      name: {
-        type: String,
-        required: [true, 'Set name for contact'],
-      },
-      email: {
-        type: String,
-      },
-      phone: {
-        type: String,
-      },
-      favorite: {
-        type: Boolean,
-        default: false,
-      },
-    }
-    )
-    const Contact = await mongoose.model('Contact', contactSchema);
     const contactRegistered = await Contact.create(body);
     return contactRegistered;
   } catch (error) {
