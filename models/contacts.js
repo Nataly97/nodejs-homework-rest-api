@@ -1,10 +1,13 @@
-const e = require('cors');
+// const e = require('cors');
 const fs = require('fs/promises');
 const path = require('path');
 const pathContacts = path.join(__dirname, "../models/contacts.json");
 
 const nanoid = require('nanoid');
 const joi = require('joi');
+
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 //Función para listar contactos 
 const listContacts = async () => {
@@ -41,22 +44,27 @@ const removeContact = async (contactId) => {
 
 //Función para crear un nuevo contacto 
 const addContact = async (body) => {
-  const schema = joi.object({
-    name: joi.string().required(),
-    email: joi.string().required(),
-    phone: joi.string().required(),
-  });
   try {
-    let result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    await schema.validateAsync({
-      name: body.name,
-      email: body.email,
-      phone: body.phone,
-    });
-    let newContact = { id: nanoid.nanoid(), ...body };
-    result.push(newContact);
-    await fs.writeFile(pathContacts, JSON.stringify(result, null, 2));
-    return newContact;
+    const contactSchema = new Schema({
+      name: {
+        type: String,
+        required: [true, 'Set name for contact'],
+      },
+      email: {
+        type: String,
+      },
+      phone: {
+        type: String,
+      },
+      favorite: {
+        type: Boolean,
+        default: false,
+      },
+    }
+    )
+    const Contact = await mongoose.model('Contact', contactSchema);
+    const contactRegistered = await Contact.create(body);
+    return contactRegistered;
   } catch (error) {
     console.log(error)
   }
