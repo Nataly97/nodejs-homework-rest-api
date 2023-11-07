@@ -19,8 +19,9 @@ const listContacts = async () => {
 //Función para filtrar contactos por Id 
 const getContactById = async (contactId) => {
   try {
-    const result = JSON.parse((await fs.readFile(pathContacts)).toString());
-    const contact = result.find(contact => contact.id === contactId)
+    // const result = JSON.parse((await fs.readFile(pathContacts)).toString());
+    // const contact = result.find(contact => contact.id === contactId)
+    const contact = await Contact.findById(contactId);
     return contact
   } catch (error) {
     console.log(error)
