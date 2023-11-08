@@ -50,10 +50,19 @@ const updateContact = async (contactId, body) => {
   }
 }
 
+const updateStatusContact = async (contactId, body) => {
+  try {
+    const contact = await Contact.findByIdAndUpdate(contactId, body);
+    return contact
+  } catch (error) {
+    console.log(error)
+  }
+}
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  updateStatusContact,
 }
