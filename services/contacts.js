@@ -1,4 +1,4 @@
-const Contact = require("./contactSchema")
+const Contact = require("../models/contactSchema")
 
 //Función para listar contactos 
 const listContacts = async () => {
@@ -6,7 +6,7 @@ const listContacts = async () => {
     let listContacts = await Contact.find();
     return listContacts;
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
 
@@ -16,7 +16,7 @@ const getContactById = async (contactId) => {
     const contact = await Contact.findById(contactId);
     return contact
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
 
@@ -26,7 +26,7 @@ const removeContact = async (contactId) => {
     await Contact.findByIdAndDelete(contactId);
     return true;
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
 
@@ -36,7 +36,7 @@ const addContact = async (body) => {
     const contactRegistered = await Contact.create(body);
     return contactRegistered;
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
 
@@ -46,23 +46,24 @@ const updateContact = async (contactId, body) => {
     const contact = await Contact.findByIdAndUpdate(contactId, body);
     return contact
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
 
-const updateStatusContact = async (contactId, body) => {
+const updateFavoriteContact = async (contactId, body) => {
   try {
     const contact = await Contact.findByIdAndUpdate(contactId, body);
     return contact
   } catch (error) {
-    console.log(error)
+    console.log("Error de servicio", error)
   }
 }
+
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
-  updateStatusContact,
+  updateFavoriteContact,
 }
