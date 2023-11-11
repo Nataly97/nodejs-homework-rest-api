@@ -1,4 +1,5 @@
-const Contact = require("../models/contactSchema")
+const Contact = require("../models/contactSchema");
+const validSchema = require("../models/contactSchemaValidations")
 
 //Función para listar contactos 
 const listContacts = async () => {
@@ -33,6 +34,8 @@ const removeContact = async (contactId) => {
 //Función para crear un nuevo contacto 
 const addContact = async (body) => {
   try {
+    //Validación del Schema
+    await validSchema.postSchemaValidations(body)
     const contactRegistered = await Contact.create(body);
     return contactRegistered;
   } catch (error) {
@@ -43,6 +46,7 @@ const addContact = async (body) => {
 //Función para actualizar contacto por Id
 const updateContact = async (contactId, body) => {
   try {
+    await validSchema.putSchemaValidations(body)
     const contact = await Contact.findByIdAndUpdate(contactId, body);
     return contact
   } catch (error) {
@@ -52,6 +56,7 @@ const updateContact = async (contactId, body) => {
 
 const updateFavoriteContact = async (contactId, body) => {
   try {
+    await validSchema.patchSchemaValidations(body);
     const contact = await Contact.findByIdAndUpdate(contactId, body);
     return contact
   } catch (error) {
