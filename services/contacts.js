@@ -1,5 +1,4 @@
 const Contact = require("../models/contactSchema");
-const validSchema = require("../models/contactSchemaValidations")
 
 //Función para listar contactos 
 const listContacts = async () => {
@@ -7,7 +6,7 @@ const listContacts = async () => {
     let listContacts = await Contact.find();
     return listContacts;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
@@ -15,9 +14,9 @@ const listContacts = async () => {
 const getContactById = async (contactId) => {
   try {
     const contact = await Contact.findById(contactId);
-    return contact
+    return contact;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
@@ -27,40 +26,36 @@ const removeContact = async (contactId) => {
     await Contact.findByIdAndDelete(contactId);
     return true;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
 //Función para crear un nuevo contacto 
 const addContact = async (body) => {
   try {
-    //Validación del Schema
-    await validSchema.postSchemaValidations(body)
     const contactRegistered = await Contact.create(body);
     return contactRegistered;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
 //Función para actualizar contacto por Id
 const updateContact = async (contactId, body) => {
   try {
-    await validSchema.putSchemaValidations(body)
     const contact = await Contact.findByIdAndUpdate(contactId, body);
-    return contact
+    return contact;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
 const updateFavoriteContact = async (contactId, body) => {
   try {
-    await validSchema.patchSchemaValidations(body);
     const contact = await Contact.findByIdAndUpdate(contactId, body);
-    return contact
+    return contact;
   } catch (error) {
-    console.log("Error de servicio", error)
+    console.log("Error de servicio", error);
   }
 }
 
