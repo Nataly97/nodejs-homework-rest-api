@@ -1,4 +1,5 @@
 const service = require('../../services/contacts')
+const validSchema = require("../../models/contactSchemaValidations")
 
 const putContactById = async (req, res) => {
     try {
@@ -7,11 +8,13 @@ const putContactById = async (req, res) => {
         if (!body || Object.keys(body).length === 0) {
             return res.status(400).json({ message: "Missing fields" });
         } else {
-            const result = await service.updateContact(contactId, body);
-            if (result) {
-                res.status(200).json(result);
-            } else {
+            //Validación del Schema
+            const { error } = validSchema.putSchemaValidations(body);
+            if (error !== undefined) {
                 res.status(404).json({ message: 'Not found' });
+            } else {
+                const result = await service.updateContact(contactId, body);
+                res.status(200).json(result);
             }
         }
     } catch (error) {

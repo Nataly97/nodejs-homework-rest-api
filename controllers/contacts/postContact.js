@@ -1,13 +1,16 @@
 const service = require('../../services/contacts')
+const validSchema = require("../../models/contactSchemaValidations")
 
 const postContact = async (req, res) => {
     try {
         const body = req.body;
-        const result = await service.addContact(body);
-        if (result) {
-            res.status(201).json(result);
+        //Validación del Schema
+        const { error } = validSchema.postSchemaValidations(body);
+        if (error !== undefined) {
+            res.status(400).send({ message: 'Missing required name field' });
         } else {
-            res.status(400).send({ message: 'Missing required name field' })
+            const result = await service.addContact(body);
+            res.status(201).json(result);
         }
     } catch (error) {
         return res.status(500).json({
