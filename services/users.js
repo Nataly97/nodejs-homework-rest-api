@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const User = require("../models/userSchema");
 
-const signUp = async (Data) => {
+const createUser = async (Data) => {
     try {
         //Validación de correo
         const user = await User.findOne({
@@ -22,5 +22,5 @@ const signUp = async (Data) => {
 }
 
 module.exports = {
-    signUp,
+    createUser,
 }

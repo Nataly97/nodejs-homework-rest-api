@@ -1,7 +1,7 @@
 const joi = require('joi');
 const userSchemaValidations = (body) => {
     const Schema = joi.object({
-        email: joi.string().required(),
+        email: joi.string().email().required(),
         password: joi.string().required(),
     });
     return Schema.validate(body);
