@@ -12,19 +12,12 @@ const signUp = async (Data) => {
         }
         //Hash password
         const salt = await bcrypt.genSalt(10);
-        const password = await bcrypt.hash(Data.password, salt);
-
-        console.log(password);
-        console.log(Data.password);
-        return Data
-        
-        // {
-        //     success: true,
-        //     result: 1,
-        //     message: "Usuario creado",
-        // }
+        Data.password = await bcrypt.hash(Data.password, salt);
+        //Creación de usuario
+        const createUser = await User.create(Data);
+        return createUser
     } catch (error) {
-
+        console.log(error);
     }
 }
 
