@@ -1,4 +1,5 @@
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require("../models/userSchema");
 
 const createUser = async (Data) => {
@@ -8,7 +9,7 @@ const createUser = async (Data) => {
             email: Data.email,
         })
         if (user) {
-            return false
+            return
         }
         //Hash password
         const salt = await bcrypt.genSalt(10);
@@ -21,6 +22,41 @@ const createUser = async (Data) => {
     }
 }
 
+const loginUser = async (Data) => {
+    try {
+        //Validación de correo
+        const isUser = await User.findOne({ email: Data.email });
+        if (!isUser) {
+            return
+        };
+        //Validar contraseña
+        const validPassword = await bcrypt.compare(Data.password, isUser.password);
+        if (!validPassword) {
+            return
+        }
+        //Generación de Token
+        const token = jwt.sign(
+            {
+                email: isUser.email,
+                subscription: isUser.subscription,
+            },
+            process.env.TOKEN_SECRET
+        );
+        //Guardar token en el usuario
+        await User.findOneAndUpdate({ email: isUser.email }, { token });
+        return {
+            token,
+            "user":{
+                email: isUser.email,
+                subscription: isUser.subscription,
+            } 
+        };
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports = {
     createUser,
+    loginUser,
 }

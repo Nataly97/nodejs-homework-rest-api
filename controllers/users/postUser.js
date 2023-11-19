@@ -10,7 +10,7 @@ const postUser = async (req, res) => {
             res.status(400).send({ message: 'Error de Joi u otra biblioteca de validación' });
         } else {
             const result = await service.createUser(body);
-            if (result === false) {
+            if (!result) {
                 res.status(409).send({ message: 'Email in use' });
             } else {
                 res.status(201).json(result);
