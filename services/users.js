@@ -57,7 +57,23 @@ const loginUser = async (Data) => {
     }
 }
 
+const logoutUser = async (Data) =>{
+    try {
+        const user = await User.findOne({
+            id: Data._id,
+        })
+        if(!user){
+            return
+        }else{
+            const newUSer = await User.findOneAndUpdate({_id: user._id }, { token: null });
+            return newUSer;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     createUser,
     loginUser,
+    logoutUser,
 }
