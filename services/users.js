@@ -37,6 +37,7 @@ const loginUser = async (Data) => {
         //Generación de Token
         const token = jwt.sign(
             {
+                _id: isUser._id,
                 email: isUser.email,
                 subscription: isUser.subscription,
             },
