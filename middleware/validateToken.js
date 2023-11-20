@@ -5,16 +5,16 @@ const validateToken = async (req, res, next) => {
     try {
         if (!req.headers.authorization) {
             return res.status(401).send({
-                message: 'Not aurhiorized'
+                message: 'Not authorized'
             });
         };
-        const token = req.headers.authorization.split(" ")[1];
-        const verifyToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        const [bearer, token] = req.headers.authorization.split(" ");
+        const userToken = jwt.verify(token, process.env.TOKEN_SECRET);
         // Verifica si el usuario existe en la base de datos
-        const user = await User.findById(verifyToken._id);
+        const user = await User.findById(userToken._id);
         if (!user || !user.token) {
             return res.status(401).send({
-                message: 'Not aurhiorized'
+                message: 'Not authorized'
             });
         } else {
             req.user = user;
@@ -22,7 +22,7 @@ const validateToken = async (req, res, next) => {
         }
     } catch (error) {
         return res.status(401).send({
-            message: 'Not aurhiorized'
+            message: 'Not authorized'
         });
     }
 }
