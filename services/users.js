@@ -47,36 +47,39 @@ const loginUser = async (Data) => {
         await User.findOneAndUpdate({ email: isUser.email }, { token });
         return {
             token,
-            "user":{
+            "user": {
                 email: isUser.email,
                 subscription: isUser.subscription,
-            } 
+            }
         };
     } catch (error) {
         console.log(error);
     }
 }
 
-const logoutUser = async (Id) =>{
+const logoutUser = async (Id) => {
     try {
+        //Buscar Usuario por Id en la DB
         const userId = await User.findOne(Id)
-        if(!userId){
+        if (!userId) {
             return
-        }else{
-            const newUser = await User.findOneAndUpdate({_id: userId}, { token: null });
-            return newUser;
+        } else {
+            //Eliminar token del usuario
+            await User.findOneAndUpdate({ _id: userId }, { token: null });
+            return
         }
     } catch (error) {
         console.log(error);
     }
 }
 
-const currentUser = async (Data) =>{
+const currentUser = async (Data) => {
     try {
+        //Verificar si existe el Id del usuario
         const user = await User.findOne(Data._id)
-        if(!user){
+        if (!user) {
             return
-        }else{
+        } else {
             return {
                 email: user.email,
                 subscription: user.subscription,
