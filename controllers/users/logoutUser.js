@@ -2,8 +2,8 @@ const service = require('../../services/users');
 
 const logoutUser = async (req, res) => {
     try {
-        const body = await req.body;
-        const result = await service.logoutUser(body);
+        const userId = await req.user._id;
+        const result = await service.logoutUser(userId);
         if (!result) {
             res.status(401).send({ message: 'Not authorized' });
         } else {

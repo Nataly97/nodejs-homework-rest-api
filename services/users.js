@@ -57,16 +57,14 @@ const loginUser = async (Data) => {
     }
 }
 
-const logoutUser = async (Data) =>{
+const logoutUser = async (Id) =>{
     try {
-        const user = await User.findOne({
-            id: Data._id,
-        })
-        if(!user){
+        const userId = await User.findOne(Id)
+        if(!userId){
             return
         }else{
-            const newUSer = await User.findOneAndUpdate({_id: user._id }, { token: null });
-            return newUSer;
+            const newUser = await User.findOneAndUpdate({_id: userId}, { token: null });
+            return newUser;
         }
     } catch (error) {
         console.log(error);
