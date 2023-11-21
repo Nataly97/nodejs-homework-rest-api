@@ -70,8 +70,25 @@ const logoutUser = async (Id) =>{
         console.log(error);
     }
 }
+
+const currentUser = async (Data) =>{
+    try {
+        const user = await User.findOne(Data._id)
+        if(!user){
+            return
+        }else{
+            return {
+                email: user.email,
+                subscription: user.subscription,
+            };
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     createUser,
     loginUser,
     logoutUser,
+    currentUser,
 }
