@@ -1,9 +1,9 @@
 const Contact = require("../models/contactSchema");
 
 //Función para listar contactos 
-const listContacts = async () => {
+const listContacts = async (skip, limit, favorite, userId) => {
   try {
-    let listContacts = await Contact.find();
+    const listContacts = await Contact.find({ owner:userId, favorite }, null, { skip, limit: Number(limit) });
     return listContacts;
   } catch (error) {
     console.log("Error de servicio", error);
