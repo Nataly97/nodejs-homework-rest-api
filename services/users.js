@@ -89,9 +89,22 @@ const currentUser = async (Data) => {
         console.log(error);
     }
 }
+
+const updateSubscriptionUser = async (userId, body) => {
+    try {
+        const newUser = await User.findByIdAndUpdate(userId, body);
+        return {
+            email: newUser.email,
+            subscription: newUser.subscription,
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports = {
     createUser,
     loginUser,
     logoutUser,
     currentUser,
+    updateSubscriptionUser,
 }

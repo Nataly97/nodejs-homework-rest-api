@@ -7,5 +7,7 @@ userRouter.post("/signup", controller.postUser);
 userRouter.post("/login", controller.loginUser);
 userRouter.get("/logout", validateToken, controller.logoutUser);
 userRouter.get("/current", validateToken, controller.currentUser);
+userRouter.patch("/", validateToken, controller.updateSubscriptionUser);
+
     
 module.exports = userRouter;

@@ -7,6 +7,13 @@ const userSchemaValidations = (body) => {
     return Schema.validate(body);
 }
 
+const patchUserSchemaValidations = (body) => {
+    const Schema = joi.object({
+        subscription: joi.string().required(),
+    });
+    return Schema.validate(body);
+}
 module.exports = {
-    userSchemaValidations
+    userSchemaValidations,
+    patchUserSchemaValidations,
 }
