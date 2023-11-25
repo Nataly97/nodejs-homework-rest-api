@@ -73,23 +73,6 @@ const logoutUser = async (Id) => {
     }
 }
 
-const currentUser = async (Data) => {
-    try {
-        //Verificar si existe el Id del usuario
-        const user = await User.findOne(Data._id)
-        if (!user) {
-            return
-        } else {
-            return {
-                email: user.email,
-                subscription: user.subscription,
-            };
-        }
-    } catch (error) {
-        console.log(error);
-    }
-}
-
 const updateSubscriptionUser = async (userId, body) => {
     try {
         const newUser = await User.findByIdAndUpdate(userId, body);
@@ -105,6 +88,5 @@ module.exports = {
     createUser,
     loginUser,
     logoutUser,
-    currentUser,
     updateSubscriptionUser,
 }

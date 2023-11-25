@@ -16,10 +16,9 @@ const validateToken = async (req, res, next) => {
             return res.status(401).send({
                 message: 'Not authorized'
             });
-        } else {
-            req.user = user;
-            next();
         }
+        req.user = user;
+        next();
     } catch (error) {
         return res.status(401).send({
             message: 'Not authorized'
