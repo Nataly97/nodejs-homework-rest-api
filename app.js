@@ -1,6 +1,7 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
+const path = require('path')
 
 const router = require("./routes/api");
 
@@ -14,6 +15,9 @@ app.use(express.json())
 app.use(express.urlencoded({
   extended:false,
 }))
+
+//Configuración de express para archivos estaticos
+app.use(express.static(path.join(__dirname, './public')))
 
 app.use('/api/', router())
 
