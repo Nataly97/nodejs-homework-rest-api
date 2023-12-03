@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require("../models/userSchema");
+const gravatar = require('gravatar')
 
 const createUser = async (Data) => {
+    console.log(Data)
     try {
         //Validación de correo
         const user = await User.findOne({
@@ -14,6 +16,7 @@ const createUser = async (Data) => {
         //Hash password
         const salt = await bcrypt.genSalt(10);
         Data.password = await bcrypt.hash(Data.password, salt);
+        Data.avatarURL = await gravatar.url(Data.email);
         //Creación de usuario
         const createUser = await User.create(Data);
         return createUser
