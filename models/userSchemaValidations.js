@@ -14,7 +14,14 @@ const patchUserSchemaValidations = (body) => {
     });
     return Schema.validate(body);
 }
+const patchAvatarUser = (body) => {
+    const Schema = joi.object({
+        avatarURL: joi.string().required,
+    });
+    return Schema.validate(body);
+}
 module.exports = {
     userSchemaValidations,
     patchUserSchemaValidations,
+    patchAvatarUser
 }

@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 app.use(multer({
   storage,
   //destino
-  dest: path.join(__dirname, './public/avatars'),
+  dest: path.join(__dirname, './tmp'),
   fileFilter: (req, file, cb) => {
     const filetypes = /jpg|jpeg|png|gif/ 
     const mimetype = filetypes.test(file.mimetype) 

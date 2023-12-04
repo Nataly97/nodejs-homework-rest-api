@@ -87,9 +87,23 @@ const updateSubscriptionUser = async (userId, body) => {
         console.log(error);
     }
 }
+
+const patchAvatarUser = async (userId, avatarURL) =>{
+    try {
+        console.log(avatarURL)
+        const newAvatar = await User.findByIdAndUpdate(userId, {avatarURL:avatarURL});
+        return {
+            avatarURL: newAvatar.avatarURL,
+        }
+    } catch (error) {
+        console.log(error);
+    }
+
+}
 module.exports = {
     createUser,
     loginUser,
     logoutUser,
     updateSubscriptionUser,
+    patchAvatarUser,
 }

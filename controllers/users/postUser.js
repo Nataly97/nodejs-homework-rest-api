@@ -4,7 +4,6 @@ const validSchema = require('../../models/userSchemaValidations');
 const postUser = async (req, res) => {
     try {
         const body = req.body;
-        console.log(req.file)
         const avatarURL = req.file.path;
         //Validación del Schema
         const { error } = validSchema.userSchemaValidations(body);
