@@ -4,7 +4,6 @@ const User = require("../models/userSchema");
 const gravatar = require('gravatar')
 
 const createUser = async (Data) => {
-    console.log(Data)
     try {
         //Validación de correo
         const user = await User.findOne({
@@ -90,7 +89,6 @@ const updateSubscriptionUser = async (userId, body) => {
 
 const patchAvatarUser = async (userId, avatarURL) =>{
     try {
-        console.log(avatarURL)
         const newAvatar = await User.findByIdAndUpdate(userId, {avatarURL:avatarURL});
         return {
             avatarURL: newAvatar.avatarURL,

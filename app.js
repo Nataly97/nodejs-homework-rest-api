@@ -18,8 +18,8 @@ app.use(express.urlencoded({
 //Configuración de express para archivos estaticos
 app.use(express.static('/public/avatars'))
 
-
 app.use('/api/', router())
+app.use('/users/', router())
 
 app.use((req, res) => {
   res.status(404).json({ message: 'Not found' })

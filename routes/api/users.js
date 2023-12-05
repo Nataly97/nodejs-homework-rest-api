@@ -9,6 +9,5 @@ userRouter.post("/login", controller.loginUser);
 userRouter.get("/logout", validateToken, controller.logoutUser);
 userRouter.get("/current", validateToken, controller.currentUser);
 userRouter.patch("/", validateToken, controller.updateSubscriptionUser);
-userRouter.patch("/avatars", upload.single('avatar'), validateToken, controller.patchAvatarUser);
 
 module.exports = userRouter;
