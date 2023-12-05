@@ -16,7 +16,7 @@ const patchUserSchemaValidations = (body) => {
 }
 const patchAvatarUser = (body) => {
     const Schema = joi.object({
-        avatarURL: joi.string().required,
+        avatarURL: joi.string().required(),
     });
     return Schema.validate(body);
 }

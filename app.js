@@ -1,8 +1,6 @@
 const express = require('express')
 const logger = require('morgan')
 const cors = require('cors')
-const multer = require('multer')
-const path = require('path')
 
 const router = require("./routes/api");
 
@@ -17,32 +15,8 @@ app.use(express.urlencoded({
   extended:false,
 }))
 
-//Multer 
-const storage = multer.diskStorage({
-  destination: path.join(__dirname, './public/avatars'),
-  filename: (req, file, cb) => {
-    cb(null, path.extname(file.originalname).toLocaleLowerCase())
-  }
-})
-app.use(multer({
-  storage,
-  //destino
-  dest: path.join(__dirname, './tmp'),
-  fileFilter: (req, file, cb) => {
-    const filetypes = /jpg|jpeg|png|gif/ 
-    const mimetype = filetypes.test(file.mimetype) 
-    const extname = filetypes.test(path.extname(file.originalname).toLocaleLowerCase())
-
-    if (mimetype && extname) {
-      cb(null, true)
-    } else {
-      cb(new Error('Valide la extensión'))
-    }
-  }
-}).single('avatar'))
-
 //Configuración de express para archivos estaticos
-app.use(express.static(path.join(__dirname, './public')))
+app.use(express.static('/public/avatars'))
 
 
 app.use('/api/', router())
